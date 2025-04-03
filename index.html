@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PCR - Acheter une Notation de Carte</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>PCR - Soumettez votre carte pour notation</h1>
+  </header>
+  
+  <main>
+    <section class="form-section">
+      <h2>Soumettre une carte</h2>
+      <form id="submission-form" action="/submit-card" method="POST">
+        <label for="card-name">Nom de la carte :</label>
+        <input type="text" id="card-name" name="card-name" required>
+
+        <label for="card-image">Télécharger une image de la carte :</label>
+        <input type="file" id="card-image" name="card-image" accept="image/*" required>
+
+        <label for="service-type">Choisissez un service de notation :</label>
+        <select id="service-type" name="service-type" required>
+          <option value="basic">Notation de base</option>
+          <option value="premium">Notation premium</option>
+        </select>
+
+        <button type="submit">Soumettre la carte</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 PCR - Tous droits réservés</p>
+  </footer>
+
+  <script>
+    const form = document.getElementById('submission-form');
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const fileInput = document.getElementById('card-image');
+      
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      reader.onloadend = function() {
+        const base64Image = reader.result.split(',')[1]; // On garde la partie après 'data:image/png;base64,'
+
+        // Ajoutons l'image en base64 dans les données du formulaire
+        formData.append('card-image-base64', base64Image);
+
+        // On peut maintenant envoyer ces données au serveur
+        fetch('/submit-card', {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert('Carte soumise avec succès !');
+        })
+        .catch(error => {
+          alert('Erreur lors de la soumission de la carte.');
+        });
+      };
+
+      // Lire le fichier en base64
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>
