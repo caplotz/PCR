@@ -1,74 +1,139 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PCR - Acheter une Notation de Carte</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Site de vente de cartes avec notation PCR - cartes de collection, cartes à jouer et cartes personnalisées.">
+    <title>Vente de Cartes - Notation PCR</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #444;
+        }
+        nav a {
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        nav a:hover {
+            background-color: #666;
+        }
+        section {
+            margin: 20px;
+        }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            width: 250px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 10px;
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .card h3 {
+            margin: 10px 0;
+        }
+        .card p {
+            color: #555;
+        }
+        .card .price {
+            font-weight: bold;
+            color: green;
+        }
+        .card .rating {
+            font-weight: bold;
+            color: #ffb84d;
+            margin-top: 10px;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>PCR - Soumettez votre carte pour notation</h1>
-  </header>
-  
-  <main>
-    <section class="form-section">
-      <h2>Soumettre une carte</h2>
-      <form id="submission-form" action="/submit-card" method="POST">
-        <label for="card-name">Nom de la carte :</label>
-        <input type="text" id="card-name" name="card-name" required>
 
-        <label for="card-image">Télécharger une image de la carte :</label>
-        <input type="file" id="card-image" name="card-image" accept="image/*" required>
+    <header>
+        <h1>Vente de Cartes avec Notation PCR</h1>
+        <p>Cartes à vendre avec une évaluation professionnelle de leur état (PCR)</p>
+    </header>
 
-        <label for="service-type">Choisissez un service de notation :</label>
-        <select id="service-type" name="service-type" required>
-          <option value="basic">Notation de base</option>
-          <option value="premium">Notation premium</option>
-        </select>
+    <nav>
+        <a href="#">Accueil</a>
+        <a href="#">Cartes de Collection</a>
+        <a href="#">Cartes à Jouer</a>
+        <a href="#">Cartes Personnalisées</a>
+        <a href="#">Contact</a>
+    </nav>
 
-        <button type="submit">Soumettre la carte</button>
-      </form>
+    <section>
+        <h2>Nos Cartes Disponibles</h2>
+        <div class="card-container">
+            <div class="card">
+                <img src="https://via.placeholder.com/200" alt="Carte 1">
+                <h3>Carte de Collection A</h3>
+                <p>Une carte rare pour les collectionneurs.</p>
+                <p class="price">25 €</p>
+                <p class="rating">Notation PCR : 9/10</p>
+                <button>Acheter</button>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/200" alt="Carte 2">
+                <h3>Carte à Jouer B</h3>
+                <p>Idéale pour vos jeux de cartes.</p>
+                <p class="price">15 €</p>
+                <p class="rating">Notation PCR : 8/10</p>
+                <button>Acheter</button>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/200" alt="Carte 3">
+                <h3>Carte Personnalisée C</h3>
+                <p>Créez votre propre carte personnalisée.</p>
+                <p class="price">30 €</p>
+                <p class="rating">Notation PCR : 10/10</p>
+                <button>Acheter</button>
+            </div>
+        </div>
     </section>
-  </main>
 
-  <footer>
-    <p>&copy; 2025 PCR - Tous droits réservés</p>
-  </footer>
+    <footer>
+        <p>&copy; 2025 Vente de Cartes. Tous droits réservés.</p>
+        <p><a href="mailto:contact@ventedecartes.com">Contactez-nous</a></p>
+    </footer>
 
-  <script>
-    const form = document.getElementById('submission-form');
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
-
-      const formData = new FormData(form);
-      const fileInput = document.getElementById('card-image');
-      
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.onloadend = function() {
-        const base64Image = reader.result.split(',')[1]; // On garde la partie après 'data:image/png;base64,'
-
-        // Ajoutons l'image en base64 dans les données du formulaire
-        formData.append('card-image-base64', base64Image);
-
-        // On peut maintenant envoyer ces données au serveur
-        fetch('/submit-card', {
-          method: 'POST',
-          body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-          alert('Carte soumise avec succès !');
-        })
-        .catch(error => {
-          alert('Erreur lors de la soumission de la carte.');
-        });
-      };
-
-      // Lire le fichier en base64
-      reader.readAsDataURL(file);
-    });
-  </script>
 </body>
 </html>
