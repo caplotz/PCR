@@ -3,137 +3,328 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Site de vente de cartes avec notation PCR - cartes de collection, cartes à jouer et cartes personnalisées.">
-    <title>Vente de Cartes - Notation PCR</title>
+    <meta name="description" content="Envoyez vos cartes pour une évaluation professionnelle selon le système PCR (Premium, Ultra, Ultimate)">
+    <title>Service de Notation de Cartes PCR</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            box-sizing: border-box;
         }
-        header {
-            background-color: #333;
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            height: 100%;
+            overflow: auto;
+            position: relative;
+        }
+
+        /* Effet de neige */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            z-index: -1; /* Assurez-vous que la neige est derrière tous les autres éléments */
+            pointer-events: none;
+            user-select: none;
+            font-size: 24px;
             color: white;
-            padding: 10px 0;
-            text-align: center;
+            animation: fall 10s linear infinite;
         }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px);
+            }
+            100% {
+                transform: translateY(100vh);
+            }
+        }
+
+        header {
+            background-color: rgba(33, 33, 33, 0.8);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
         header h1 {
             margin: 0;
+            font-size: 3em;
         }
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: #444;
-        }
-        nav a {
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-        nav a:hover {
-            background-color: #666;
-        }
+
         section {
-            margin: 20px;
+            margin: 40px;
         }
+
         .card-container {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
             justify-content: center;
         }
+
         .card {
-            background-color: white;
-            border-radius: 8px;
+            background-color: #1f1f1f;
+            border-radius: 15px;
             width: 250px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
             text-align: center;
-            padding: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-radius 0.3s ease;
         }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+            border-radius: 20px;
+        }
+
         .card img {
             width: 100%;
             height: auto;
-            border-radius: 8px;
+            border-radius: 10px;
         }
+
         .card h3 {
             margin: 10px 0;
+            font-size: 1.5em;
         }
+
         .card p {
-            color: #555;
+            color: #aaa;
         }
+
         .card .price {
             font-weight: bold;
-            color: green;
+            color: #00ff00;
         }
+
         .card .rating {
             font-weight: bold;
-            color: #ffb84d;
             margin-top: 10px;
         }
+
+        .premium {
+            color: #999;
+            font-size: 18px;
+        }
+
+        .ultra {
+            color: #ff6600;
+            font-size: 18px;
+        }
+
+        .ultimate {
+            color: gold;
+            font-size: 18px;
+        }
+
+        .form-container {
+            background-color: rgba(33, 33, 33, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            margin-top: 40px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .form-container input, .form-container textarea, .form-container button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background-color: #222;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
         footer {
-            background-color: #333;
+            background-color: rgba(33, 33, 33, 0.8);
             color: white;
             text-align: center;
             padding: 10px 0;
         }
+
         footer a {
             color: white;
             text-decoration: none;
         }
+
+        button {
+            background-color: #444;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1em; /* Small size */
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        button:hover {
+            background-color: #555;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+        }
+
+        /* Style pour le modal */
+        #formModal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(33, 33, 33, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            display: none; /* Masquer par défaut */
+        }
+
     </style>
 </head>
 <body>
 
+    <!-- Effet de neige -->
+    <div class="snowflake" style="left: 10%; animation-duration: 12s;"></div>
+    <div class="snowflake" style="left: 30%; animation-duration: 14s;"></div>
+    <div class="snowflake" style="left: 50%; animation-duration: 10s;"></div>
+    <div class="snowflake" style="left: 70%; animation-duration: 16s;"></div>
+    <div class="snowflake" style="left: 90%; animation-duration: 12s;"></div>
+
     <header>
-        <h1>Vente de Cartes avec Notation PCR</h1>
-        <p>Cartes à vendre avec une évaluation professionnelle de leur état (PCR)</p>
+        <h1>Service de Notation de Cartes PCR</h1>
+        <p>Envoyez vos cartes pour une évaluation professionnelle</p>
     </header>
 
-    <nav>
-        <a href="#">Accueil</a>
-        <a href="#">Cartes de Collection</a>
-        <a href="#">Cartes à Jouer</a>
-        <a href="#">Cartes Personnalisées</a>
-        <a href="#">Contact</a>
-    </nav>
-
     <section>
-        <h2>Nos Cartes Disponibles</h2>
         <div class="card-container">
             <div class="card">
-                <img src="https://via.placeholder.com/200" alt="Carte 1">
-                <h3>Carte de Collection A</h3>
-                <p>Une carte rare pour les collectionneurs.</p>
-                <p class="price">25 €</p>
-                <p class="rating">Notation PCR : 9/10</p>
-                <button>Acheter</button>
+                <img src="https://via.placeholder.com/200" alt="Carte de Collection A">
+                <h3>Notation NCR 1</h3>
+                <p>Une carte notée avec des restrictions très strictes pour assurer la bonne et précise note de la carte.</p>
+                <p class="price">5 CAD$</p>
+                <p class="rating premium">Notation PCR : Premium</p>
+                <div id="paypal-button-container-1"></div>
             </div>
             <div class="card">
-                <img src="https://via.placeholder.com/200" alt="Carte 2">
-                <h3>Carte à Jouer B</h3>
-                <p>Idéale pour vos jeux de cartes.</p>
-                <p class="price">15 €</p>
-                <p class="rating">Notation PCR : 8/10</p>
-                <button>Acheter</button>
+                <img src="https://via.placeholder.com/200" alt="Carte de Collection B">
+                <h3>Notation NCR 2</h3>
+                <p>Une carte notée avec des règles très strictes. Une fois notée, la carte est assurée une sécurité extraordinaire.</p>
+                <p class="price">10 CAD$</p>
+                <p class="rating ultra">Notation PCR : Ultra</p>
+                <div id="paypal-button-container-2"></div>
             </div>
             <div class="card">
-                <img src="https://via.placeholder.com/200" alt="Carte 3">
-                <h3>Carte Personnalisée C</h3>
-                <p>Créez votre propre carte personnalisée.</p>
-                <p class="price">30 €</p>
-                <p class="rating">Notation PCR : 10/10</p>
-                <button>Acheter</button>
+                <img src="https://via.placeholder.com/200" alt="Carte de Collection C">
+                <h3>Notation NCR 3</h3>
+                <p>Une carte parfaitement et précisément notée, en parfait état. Une fois la notation finie, une livraison rapide et efficace ce fera.</p>
+                <p class="price">15 CAD$</p>
+                <p class="rating ultimate">Notation PCR : Ultimate</p>
+                <div id="paypal-button-container-3"></div>
+            </div>
+            <!-- Ajout de la nouvelle carte Notation NCR 4 -->
+            <div class="card">
+                <img src="https://via.placeholder.com/200" alt="Carte de Collection D">
+                <h3>Notation NCR 4</h3>
+                <p>Test de notation, très basique et rapide, idéal pour un premier essai.</p>
+                <p class="price">0.01 CAD$</p>
+                <p class="rating">Notation PCR : Test</p>
+                <div id="paypal-button-container-4"></div>
             </div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2025 Vente de Cartes. Tous droits réservés.</p>
-        <p><a href="mailto:contact@ventedecartes.com">Contactez-nous</a></p>
+        <p>&copy; 2025 Service de Notation de Cartes. Tous droits réservés.</p>
+        <p><a href="mailto:contact@notationcartes.com">Contactez-nous</a></p>
     </footer>
 
+    <!-- Script PayPal -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AfvN5Iv3al3uiu966mQ_c2sFl47qN8XSotiiO7qRefTL34s2mMJDavM4wiKMKOJNsToA5QrSvY4K3a2U&currency=CAD"></script>
+    <script>
+        // PayPal Button Setup for Notation NCR 1
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '5.00'  // Price for Notation NCR 1
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Paiement effectué pour Notation NCR 1');
+                });
+            }
+        }).render('#paypal-button-container-1'); // Render PayPal button for Notation NCR 1
+
+        // PayPal Button Setup for Notation NCR 2
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '10.00'  // Price for Notation NCR 2
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Paiement effectué pour Notation NCR 2');
+                });
+            }
+        }).render('#paypal-button-container-2'); // Render PayPal button for Notation NCR 2
+
+        // PayPal Button Setup for Notation NCR 3
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '15.00'  // Price for Notation NCR 3
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Paiement effectué pour Notation NCR 3');
+                });
+            }
+        }).render('#paypal-button-container-3'); // Render PayPal button for Notation NCR 3
+
+        // PayPal Button Setup for Notation NCR 4
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: '0.01'  // Price for Notation NCR 4 (Test)
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    alert('Paiement effectué pour Notation NCR 4');
+                });
+            }
+        }).render('#paypal-button-container-4'); // Render PayPal button for Notation NCR 4
+    </script>
 </body>
 </html>
